@@ -1,0 +1,20 @@
+step 1: to create a hadoop cluster on gcp, enable 3 apis
+  * compute engine api
+  * cloud dataproc api
+  * cloud resource manager api
+step 2:  
+  create cluster -- cluster on compute engine -- create
+  a. set up cluster
+    name: hadoop-cluster
+    location: us-central zone: any
+    cluster type: standard
+    components: 
+      enable components gateways
+        jupyter notebook/lab
+  b. configure nodes
+        series: first generatio N1
+          primary disk size: 32 gb
+        number of worker nodes: 2
+          series: first generation N1
+          primary disk size: 32 gb
+  c. click on create
