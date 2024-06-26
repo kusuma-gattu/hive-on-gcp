@@ -1,0 +1,42 @@
+prerequites:
+load the car_insurance_cold_calls data into hdfs location:
+give below command on local terminal:
+gcloud compute scp car_insurance_cold_calls.csv kusuma_gatt@cluster-hadoop-m:/home/kusuma_gattu
+open ssh in browser window on master node, then copy the csv file to hdfs location. for that give the below commands:
+  * hdfs dfs -mkdir /car_insurance
+  * hdfs dfs -ls /
+  * hdfs dfs -put car_insurance_cold_calls.csv /car_insurance
+start the hive shell:
+hive
+create database hive_db;
+use hive_db;
+create table car_insurance_cold_calls
+    (
+     id int,
+     age int,
+     job string,
+     marital string,
+     education string,
+     default boolean,
+     balance int,
+     hhinsurance boolean,
+     carloan boolean,
+     communication string,
+     lastcontactday int,
+     lastcontactmonth string,
+     noofcontacts int,
+     dayspassed int,
+     prevattempts int,
+     outcome string,
+     callstart string,
+     callend string,
+     carinsurance boolean
+    )
+    row format delimited
+    fields terminated by ','
+    location '/car_insurance'
+    tblproperties("skip.header.line.count"="1");
+
+Data Exploration tasks:
+1. How many records are there in the dataset?
+  select count(*) as total_records from car_insurance_cold_calls;
