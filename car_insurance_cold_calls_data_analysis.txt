@@ -39,4 +39,37 @@ create table car_insurance_cold_calls
 
 Data Exploration tasks:
 1. How many records are there in the dataset?
-  select count(*) as total_records from car_insurance_cold_calls;
+  SELECT COUNT(*) as total_records 
+  FROM car_insurance_cold_calls;
+
+2. How many unique jobs categories are present?
+  SELECT COUNT(DISTINCT job) 
+  FROM car_insurance_cold_calls;
+
+3. What is the age distribution of customers in the dataset? Provide a breakdown by age group: 18-30, 31-45, 46-60, 61+
+  SELECT
+   SUM(CASE WHEN age <= 30 AND age >=18 THEN 1 ELSE 0 END) AS 18to30,
+   SUM(CASE WHEN age <=45 AND age >= 31 THEN 1 ELSE 0 END) AS 31to45,
+   SUM(CASE WHEN age <=60 AND age >= 46 THEN 1 ELSE 0 END) AS 46to60,
+   SUM(CASE WHEN age >= 61 then 1 else 0 end) as 60plus
+  FROM car_insurance_cold_calls;
+
+4. Count the number of records that have missing values in any field.
+  SELECT COUNT(*) AS total_missing_data_tuples 
+  FROM car_insurance_cold_calls
+  WHERE
+       education = 'NA' OR
+       communication = 'NA' OR
+       outcome = 'NA';
+
+5. Determine the number of unique 'Outcome' values and their respective counts.
+   SELECT outcome, 
+          COUNT(*) AS number_of_outcomes
+   FROM car_insurance_cold_calls
+   GROUP BY outcome;
+
+6.Find the number of customers who have both a car loan and home insurance.
+  SELECT COUNT(*) AS customers_with_car_loan_and_home_insurance
+  FROM car_insurance_cold_calls
+  WHERE hhinsurance = 1 
+  AND carloan = 1;
