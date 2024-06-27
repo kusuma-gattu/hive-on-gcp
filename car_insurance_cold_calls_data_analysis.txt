@@ -17,10 +17,10 @@ create table car_insurance_cold_calls
      job string,
      marital string,
      education string,
-     default boolean,
+     default smallint,
      balance int,
-     hhinsurance boolean,
-     carloan boolean,
+     hhinsurance smallint,
+     carloan smallint,
      communication string,
      lastcontactday int,
      lastcontactmonth string,
@@ -30,7 +30,7 @@ create table car_insurance_cold_calls
      outcome string,
      callstart string,
      callend string,
-     carinsurance boolean
+     carinsurance smallint
     )
     row format delimited
     fields terminated by ','
@@ -73,3 +73,12 @@ Data Exploration tasks:
   FROM car_insurance_cold_calls
   WHERE hhinsurance = 1 
   AND carloan = 1;
+
+Note: to print the column names set this property
+set hive.cli.print.header=true;
+
+TAKEAWAY POINTS FROM THIS EXERCISE:
+* CAN NOT ALTER COLUMNS WITH BOOLEAN DATA TYPES TO OTHER DATA TYPES 
+* DO NOT USE BOOLEAN DATA TYPE COLUMNS AS PARTITION DATA COLUMN
+* WHEN THERE IS VALUES LIKE 1 AND 0, THEN GIVE THE DATA TYPE AS INT BUT NOT AS BOOLEAN, IF YOU DO SO THEN THE VALUES WILL BE POPULATED WITH 'NULL's
+
