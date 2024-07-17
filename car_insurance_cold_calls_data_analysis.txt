@@ -10,7 +10,7 @@ start the hive shell:
 hive
 create database hive_db;
 use hive_db;
-create table car_insurance_cold_calls
+create external table car_insurance_cold_calls
     (
      id int,
      age int,
@@ -82,3 +82,109 @@ TAKEAWAY POINTS FROM THIS EXERCISE:
 * DO NOT USE BOOLEAN DATA TYPE COLUMNS AS PARTITION DATA COLUMN
 * WHEN THERE IS VALUES LIKE 1 AND 0, THEN GIVE THE DATA TYPE AS INT BUT NOT AS BOOLEAN, IF YOU DO SO THEN THE VALUES WILL BE POPULATED WITH 'NULL's
 
+AGGREGATIONS TASKS:
+1. What is the average, minimum, and maximum balance for each
+   job category?
+
+    SELECT job,
+    MIN(balance) as min_balance,
+    AVG(balance) as avg_balance,
+    MAX(balance) AS max_balance
+    FROM car_insurance_cold_calls
+    GROUP BY job;
+
+    OUTPUT:
+    OK
+    job     min_balance     avg_balance     max_balance
+    NA      -295    1129.6315789473683      4465
+    admin.  -982    1212.041394335512       19213
+    blue-collar     -931    1216.9604743083005      21522
+    entrepreneur    -799    1689.1487603305786      27624
+    housemaid       -278    859.7155963302753       4312
+    management      -1246   2135.255319148936       98417
+    retired -1206   2267.385542168675       37127
+    self-employed   -3058   1964.5857142857142      52587
+    services        -1730   851.4181818181818       11516
+    student -679    1420.8396946564885      23878
+    technician      -1317   1414.6909090909091      45248
+    unemployed      -581    1423.0153846153846      17747
+    Time taken: 10.49 seconds, Fetched: 12 row(s)
+
+2. Find the total number of customers with and without car
+   insurance
+
+   SELECT COUNT(*) as customers_with_insurance
+   FROM car_insurance_cold_calls 
+   WHERE carinsurance = 1
+   UNION
+   SELECT COUNT(*) as customers_without_insurance
+   FROM car_insurance_cold_calls 
+   WHERE carinsurance = 0;
+
+   OUTPUT:
+   OK
+   _u1.customers_with_insurance
+   1604
+   2396
+   Time taken: 11.841 seconds, Fetched: 2 row(s)
+
+3.Count the number of customers for each communication type.
+  SELECT communication,
+  > COUNT(*) AS num_of_customers
+  > FROM car_insurance_cold_calls
+  > GROUP BY communication;
+
+  OUTPUT:
+  OK
+  communication   num_of_customers
+  NA      902
+  cellular        2831
+  telephone       267
+  Time taken: 22.106 seconds, Fetched: 3 row(s)
+
+4. Calculate the sum of 'Balance' for each 'Communication' type.
+
+  hive> SELECT communication,
+    > SUM(balance) AS total_balance
+    > FROM car_insurance_cold_calls
+    > GROUP BY communication;
+
+  OUTPUT:
+  communication   total_balance
+   NA      1091772
+   cellular        4464294
+   telephone       575683
+   Time taken: 21.43 seconds, Fetched: 3 row(s)
+
+5. Count the number of 'PrevAttempts' for each 'Outcome' type
+
+   hive> SELECT outcome,
+    > COUNT(prevattempts) AS num_of_prevAttempts
+    > FROM car_insurance_cold_calls
+    > GROUP BY outcome;
+
+  OUTPUT:
+  outcome num_of_prevattempts
+  NA      3042
+  failure 437
+  other   195
+  success 326
+  Time taken: 22.438 seconds, Fetched: 4 row(s)
+
+6. Calculate the average 'NoOfContacts' for people with and without
+  'CarInsurance'
+
+   hive> SELECT carinsurance,
+    > ROUND(AVG(noofcontacts),2) as avg_num_of_contacts
+    > FROM car_insurance_cold_calls
+    > GROUP BY carinsurance;
+
+   output:
+   carinsurance    avg_num_of_contacts
+       0       2.9
+       1       2.18
+    
+
+
+   
+  
