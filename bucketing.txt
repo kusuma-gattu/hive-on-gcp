@@ -1,0 +1,32 @@
+set hive.enforce.bucketing=true
+
+hive> CREATE TABLE car_insurance_bucketed(
+    > id int,
+    > age int,
+    > job string,
+    > marital string,
+    > education string,
+    > default smallint,
+    > balance int,
+    > hhinsurance smallint,
+    > carloan smallint,
+    > communication string,
+    > lastcontactday int,
+    > lastcontactmonth string,
+    > noofcontacts int,
+    > dayspassed int,
+    > prevattempts int,
+    > outcome string,
+    > callstart string,
+    > callend string,
+    > carinsurance smallint
+    > )
+    > CLUSTERED BY (age) INTO 4 BUCKETS;
+
+
+ hive> INSERT OVERWRITE TABLE car_insurance_bucketed
+    > SELECT id, age, job, marital, education, default, balance,
+    > hhinsurance, carloan, communication, lastcontactday, lastcontactmonth,
+    > noofcontacts, dayspassed, prevattempts, outcome, callstart, callend, carinsurance
+    > FROM car_insurance_cold_calls;
+    
