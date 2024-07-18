@@ -1,0 +1,121 @@
+## STATIC PARTITIONING
+set hive.mapred.mode=strict;
+
+1. Create a partitioned table on 'Education' and 'Marital' status. Load data from the original table to this new partitioned table.
+
+   create table car_insurance_static_part (
+    id                      int,                                        
+    age                     int,                                         
+    job                     string,                                                                          
+    default                 smallint,                                    
+    balance                 int,                                         
+    hhinsurance             smallint,                                    
+    carloan                 smallint,                                   
+    communication           string,                                      
+    lastcontactday          int,                                         
+    lastcontactmonth        string,                                      
+    noofcontacts            int,                                         
+    dayspassed              int,                                         
+    prevattempts            int,                                         
+    outcome                 string,                                      
+    callstart               string,                                      
+    callend                 string,                                      
+    carinsurance            smallint
+    )
+    partitioned by ( education string, marital string);
+
+    hive> INSERT OVERWRITE TABLE car_insurance_static_part PARTITION (education='primary', marital='married')
+     SELECT id, age, job, default,
+     balance, hhinsurance, carloan, communication,
+     lastcontactday, lastcontactmonth, noofcontacts, dayspassed,
+     prevattempts, outcome, callstart, callend, carinsurance
+     FROM car_insurance_cold_calls
+     WHERE education='primary' AND marital='married';
+
+     INSERT OVERWRITE TABLE car_insurance_static_part PARTITION (education='secondary', marital='married')
+     SELECT id, age, job, default,
+     balance, hhinsurance, carloan, communication,
+     lastcontactday, lastcontactmonth, noofcontacts, dayspassed,
+     prevattempts, outcome, callstart, callend, carinsurance
+     FROM car_insurance_cold_calls
+     WHERE education='secondary' AND marital='married';
+
+     INSERT OVERWRITE TABLE car_insurance_static_part PARTITION (education='tertiary', marital='married')
+     SELECT id, age, job, default,
+     balance, hhinsurance, carloan, communication,
+     lastcontactday, lastcontactmonth, noofcontacts, dayspassed,
+     prevattempts, outcome, callstart, callend, carinsurance
+     FROM car_insurance_cold_calls
+     WHERE education='tertiary' AND marital='married';
+
+     INSERT OVERWRITE TABLE car_insurance_static_part PARTITION (education='NA', marital='married')
+     SELECT id, age, job, default,
+     balance, hhinsurance, carloan, communication,
+     lastcontactday, lastcontactmonth, noofcontacts, dayspassed,
+     prevattempts, outcome, callstart, callend, carinsurance
+     FROM car_insurance_cold_calls
+     WHERE education='NA' AND marital='married';
+
+     INSERT OVERWRITE TABLE car_insurance_static_part PARTITION (education='NA', marital='single')
+     SELECT id, age, job, default,
+     balance, hhinsurance, carloan, communication,
+     lastcontactday, lastcontactmonth, noofcontacts, dayspassed,
+     prevattempts, outcome, callstart, callend, carinsurance
+     FROM car_insurance_cold_calls
+     WHERE education='NA' AND marital='single';
+
+     INSERT OVERWRITE TABLE car_insurance_static_part PARTITION (education='primary', marital='single')
+     SELECT id, age, job, default,
+     balance, hhinsurance, carloan, communication,
+     lastcontactday, lastcontactmonth, noofcontacts, dayspassed,
+     prevattempts, outcome, callstart, callend, carinsurance
+     FROM car_insurance_cold_calls
+     WHERE education='primary' AND marital='single';
+
+     INSERT OVERWRITE TABLE car_insurance_static_part PARTITION (education='secondary', marital='single')
+     SELECT id, age, job, default,
+     balance, hhinsurance, carloan, communication,
+     lastcontactday, lastcontactmonth, noofcontacts, dayspassed,
+     prevattempts, outcome, callstart, callend, carinsurance
+     FROM car_insurance_cold_calls
+     WHERE education='secondary' AND marital='single';
+
+     INSERT OVERWRITE TABLE car_insurance_static_part PARTITION (education='tertiary', marital='single')
+     SELECT id, age, job, default,
+     balance, hhinsurance, carloan, communication,
+     lastcontactday, lastcontactmonth, noofcontacts, dayspassed,
+     prevattempts, outcome, callstart, callend, carinsurance
+     FROM car_insurance_cold_calls
+     WHERE education='tertiary' AND marital='single';
+
+     INSERT OVERWRITE TABLE car_insurance_static_part PARTITION (education='NA', marital='divorced')
+     SELECT id, age, job, default,
+     balance, hhinsurance, carloan, communication,
+     lastcontactday, lastcontactmonth, noofcontacts, dayspassed,
+     prevattempts, outcome, callstart, callend, carinsurance
+     FROM car_insurance_cold_calls
+     WHERE education='NA' AND marital='divorced';
+
+     INSERT OVERWRITE TABLE car_insurance_static_part PARTITION (education='primary', marital='divorced')
+     SELECT id, age, job, default,
+     balance, hhinsurance, carloan, communication,
+     lastcontactday, lastcontactmonth, noofcontacts, dayspassed,
+     prevattempts, outcome, callstart, callend, carinsurance
+     FROM car_insurance_cold_calls
+     WHERE education='primary' AND marital='divorced';
+
+     INSERT OVERWRITE TABLE car_insurance_static_part PARTITION (education='secondary', marital='divorced')
+     SELECT id, age, job, default,
+     balance, hhinsurance, carloan, communication,
+     lastcontactday, lastcontactmonth, noofcontacts, dayspassed,
+     prevattempts, outcome, callstart, callend, carinsurance
+     FROM car_insurance_cold_calls
+     WHERE education='secondary' AND marital='divorced';
+
+     INSERT OVERWRITE TABLE car_insurance_static_part PARTITION (education='tertiary', marital='divorced')
+     SELECT id, age, job, default,
+     balance, hhinsurance, carloan, communication,
+     lastcontactday, lastcontactmonth, noofcontacts, dayspassed,
+     prevattempts, outcome, callstart, callend, carinsurance
+     FROM car_insurance_cold_calls
+     WHERE education='tertiary' AND marital='divorced';
