@@ -30,3 +30,9 @@ hive> CREATE TABLE car_insurance_bucketed(
     > noofcontacts, dayspassed, prevattempts, outcome, callstart, callend, carinsurance
     > FROM car_insurance_cold_calls;
     
+### TASK
+Increase the number of buckets in the bucketed table to 10 and redistribute the data.
+
+    * increase the number of buckets using ALTER command will NOT redistribute the data.
+    * create new table, load the data from bucketted table and then drop the old table. 
+        this approach will effectively re-distribute the entire data. 
