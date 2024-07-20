@@ -119,3 +119,42 @@ set hive.mapred.mode=strict;
      prevattempts, outcome, callstart, callend, carinsurance
      FROM car_insurance_cold_calls
      WHERE education='tertiary' AND marital='divorced';
+
+
+## REPARTITIONING
+hive> CREATE TABLE car_insurance_static_part_new 
+    > (
+    >     id int,
+    >     age int,
+    >     default smallint,
+    >     balance int,
+    >     hhinsurance smallint,
+    >     carloan smallint,
+    >     communication string,
+    >     lastcontactday int,
+    >     lastcontactmonth string,
+    >     noofcontacts int,
+    >     dayspassed int,
+    >     prevattempts int,
+    >     outcome string,
+    >     callstart string,
+    >     callend string,
+    >     carinsurance smallint
+    >  )
+    > PARTITIONED BY (education string, marital string, job string);
+OK
+Time taken: 0.421 seconds
+
+ALTER TABLE car_insurance_static_part RENAME TO car_insurace_static_part_old;
+ALTER TABLE car_insurance_static_part RENAME TO car_insurace_static_part;
+
+# enable properties to do dynamic partition 
+SET hive.exec.dynamic.partition = true;
+SET hive.exec.dynamic.partition.mode = nonstrict;
+
+INSERT OVERWRITE TABLE car_insurance_static_part PARTITION (education, marital, job)
+SELECT id, age, job, marital, education, default,
+balance, hhinsurance, carloan, communication,
+lastcontactday, lastcontactmonth, noofcontacts, dayspassed,
+prevattempts, outcome, callstart, callend, carinsurance
+FROM car_insurance_static_part_old; 
