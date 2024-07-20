@@ -186,5 +186,77 @@ AGGREGATIONS TASKS:
     
 
 
+Window Function Tasks:
+
+1. Calculate the cumulative sum of 'NoOfContacts' for each 'Job' category, ordered by 'Age'.
+
+   SELECT job, 
+          age,
+          SUM(noofcontacts) OVER (PARTITION BY job ORDER BY age) AS cummulative_sum
+   FROM  car_insurance_bucketed;
+
+   OUTPUT:
+   Time taken: 22.923 seconds, Fetched: 4000 row(s)
+
+2.  Calculate the rank of 'Balance' within each 'Job' category, ordered by 'Balance' descending.
+
+    SELECT job,
+           balance,
+           DENSE_RANK() OVER (PARTITION BY job ORDER BY balance DESC) AS ranks
+    FROM car_insurance_cold_calls;
+
+3. Find the job category with the highest number of car insurances
+
+     SELECT job,
+     SUM(carinsurance) AS num_of_car_insurance
+     FROM car_insurance_static_part_old
+     GROUP BY job
+     ORDER BY num_of_car_insurance desc
+     LIMIT 1;
+
+     OUTPUT:
+     management      392
+     Time taken: 12.59 seconds, Fetched: 1 row(s)
+
+4. Which month has seen the highest number of last contacts?
    
-  
+   SELECT lastcontactmonth AS month,
+   SUM(noofcontacts) as num_of_contacts
+   FROM car_insurance_static_part_old
+   GROUP BY lastcontactmonth
+   ORDER BY num_of_contacts desc
+   LIMIT 1;
+
+   OUTPUT:
+   may     2416
+   Time taken: 25.166 seconds, Fetched: 1 row(s)
+
+5. Calculate the ratio of the number of customers with car insurance
+   to the number of customers without car insurance for each job category.
+
+   SELECT job,
+   COUNT(CASE WHEN carinsurance = 1 THEN 1 END) AS with_insurance,
+   COUNT(CASE WHEN carinsurance = 0 THEN 1 END) AS without_insurance,
+   CASE 
+   WHEN COUNT(CASE WHEN carinsurance = 1 THEN 1 END) = 0 THEN NULL
+   ELSE 
+   ROUND(CAST(COUNT(CASE WHEN carinsurance = 1 THEN 1 END) AS DOUBLE) / COUNT(CASE    WHEN carinsurance = 0 THEN  1 END) * 100, 2) 
+   END AS ratio
+   FROM car_insurance_bucketed
+   GROUP BY job;
+
+   OUTPUT:
+   job     with_insurance  without_insurance       ratio
+   NA      9       10      90.0
+   admin.  185     274     67.52
+   blue-collar     219     540     40.56
+   entrepreneur    35      86      40.7
+   housemaid       37      72      51.39
+   management      392     501     78.24
+   retired 146     103     141.75
+   self-employed   54      86      62.79
+   services        112     218     51.38
+   student 87      44      197.73
+   technician      254     406     62.56
+   unemployed      74      56      132.14
+   Time taken: 11.888 seconds, Fetched: 12 row(s)  
